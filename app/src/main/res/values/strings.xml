@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Gif Search</string>
+    <string name="TENOR_KEY">CJ20LGM4MQ0C</string>
+    <string name="search">Search....</string>
+</resources>
