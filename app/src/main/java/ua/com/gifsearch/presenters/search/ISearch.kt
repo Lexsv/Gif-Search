@@ -19,5 +19,6 @@ interface ISearch {
         fun finishLoad()
         fun showGif (item : GifObject)
         fun swohMessag(message : String)
+        fun hideProgsess()
     }
 }

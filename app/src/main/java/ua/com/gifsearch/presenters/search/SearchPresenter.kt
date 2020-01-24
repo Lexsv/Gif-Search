@@ -32,6 +32,7 @@ class SearchPresenter @Inject constructor(var view: ISearch.View):  ISearch.Pres
 
                     override fun onResponse(call: Call<TenorGif>, response: Response<TenorGif>) {
                         Store.getListGif().value = response.body()
+                        view.hideProgsess()
                         view.hideKeyBoard()
                     }
 

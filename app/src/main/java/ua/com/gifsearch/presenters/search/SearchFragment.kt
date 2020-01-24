@@ -96,6 +96,7 @@ class SearchFragment: Fragment(), SwipyRefreshLayout.OnRefreshListener,ISearch.V
         search_button.setOnClickListener {
             queue= 10
             mPresenter.loadListGif(input_search.text.toString(),queue)
+            swipyRefresh.isRefreshing = true
         }
 
         input_search.setOnEditorActionListener{_, actionId: Int, _->
@@ -120,5 +121,9 @@ class SearchFragment: Fragment(), SwipyRefreshLayout.OnRefreshListener,ISearch.V
 
     override fun swohMessag(message: String) {
         Toast.makeText(context,message,Toast.LENGTH_LONG).show()
+    }
+
+    override fun hideProgsess() {
+        if (swipyRefresh.isRefreshing) swipyRefresh.isRefreshing = false
     }
 }
