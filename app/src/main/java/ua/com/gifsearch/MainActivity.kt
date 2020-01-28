@@ -9,7 +9,7 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.search.*
 import ua.com.gifsearch.di.mainactivity.DaggerMainActivityComponent
-import ua.com.gifsearch.di.mainactivity.MainPresenterModul
+import ua.com.gifsearch.di.mainactivity.MainPresenterModule
 import ua.com.gifsearch.presenters.mainActivity.IMaimActivity
 import ua.com.gifsearch.presenters.mainActivity.PagerAdapt
 
@@ -24,15 +24,15 @@ class MainActivity : AppCompatActivity(), OnTabSelectedListener,IMaimActivity.Vi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-       addDaggerDepandance()
+       addDaggerDependence()
         mPresenter.onStart()
         initTabLayoutAndViewPager()
 
     }
 
-    private fun addDaggerDepandance() {
+    private fun addDaggerDependence() {
         DaggerMainActivityComponent.builder()
-            .mainPresenterModul(MainPresenterModul(this))
+            .mainPresenterModule(MainPresenterModule(this))
             .build()
             .inject(this)
     }
@@ -43,12 +43,12 @@ class MainActivity : AppCompatActivity(), OnTabSelectedListener,IMaimActivity.Vi
     }
 
     private fun initTabLayoutAndViewPager() {
-        tabsLayout.addTab(tabsLayout.newTab().setIcon(R.drawable.ic_search))
-        tabsLayout.addTab(tabsLayout.newTab().setIcon(R.drawable.ic_favorite_on))
-        tabsLayout.setTabGravity(TabLayout.GRAVITY_FILL)
-        tabsLayout.addOnTabSelectedListener(this)
-        viewPager.adapter = PagerAdapt(supportFragmentManager,tabsLayout.tabCount)
-        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabsLayout))
+        tabs_layout.addTab(tabs_layout.newTab().setIcon(R.drawable.ic_search))
+        tabs_layout.addTab(tabs_layout.newTab().setIcon(R.drawable.ic_favorite_on))
+        tabs_layout.tabGravity = TabLayout.GRAVITY_FILL
+        tabs_layout.addOnTabSelectedListener(this)
+        view_pager.adapter = PagerAdapt(supportFragmentManager,tabs_layout.tabCount)
+        view_pager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabs_layout))
     }
 
     override fun onTabReselected(tab: TabLayout.Tab?){}
@@ -58,8 +58,10 @@ class MainActivity : AppCompatActivity(), OnTabSelectedListener,IMaimActivity.Vi
     }
 
     override fun onTabSelected(tab: TabLayout.Tab?) {
-        viewPager.setCurrentItem(tab!!.getPosition())
-        hideKeyBoard()
+        if (tab != null) {
+            view_pager.currentItem = tab.position
+            hideKeyBoard()
+        }
     }
 
 

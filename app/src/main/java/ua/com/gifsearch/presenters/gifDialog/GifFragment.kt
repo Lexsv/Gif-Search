@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.view_gif.*
 
 import ua.com.gifsearch.R
-import ua.com.gifsearch.di.gifDialog.DaggerGifDialodComponent
+import ua.com.gifsearch.di.gifDialog.DaggerGifDialogComponent
 import ua.com.gifsearch.di.gifDialog.GifPresenterModule
 import ua.com.gifsearch.reposetory.retrofit.GifObject
 import javax.inject.Inject
@@ -34,18 +34,17 @@ class GifFragment(var item: GifObject) : DialogFragment(),IGifDialog.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        addDaggerDepandance()
+        addDaggerDependence()
         addListeners()
         mPresenter.onStart(item)
 
     }
 
-    private fun addDaggerDepandance() {
-        DaggerGifDialodComponent.builder()
+    private fun addDaggerDependence() {
+        DaggerGifDialogComponent.builder()
             .gifPresenterModule(GifPresenterModule(this))
             .build()
             .inject(this)
-
     }
 
     private fun addListeners() {
@@ -55,12 +54,11 @@ class GifFragment(var item: GifObject) : DialogFragment(),IGifDialog.View {
 
         view_gif_save.setOnClickListener {
             mPresenter.onSave(item)
-
         }
-
     }
 
     override fun getLifecycleOwner(): LifecycleOwner = this
+
     override fun viewGif(title: String, url: String) {
         view_gif_title.text = title
         Glide.with(this)
@@ -68,7 +66,6 @@ class GifFragment(var item: GifObject) : DialogFragment(),IGifDialog.View {
             .load(url)
             .placeholder(R.drawable.ic_cloud_download)
             .into(view_gif_image)
-
     }
 
     override fun requestPermission() {
@@ -98,7 +95,7 @@ class GifFragment(var item: GifObject) : DialogFragment(),IGifDialog.View {
         dismiss()
     }
 
-    override fun swohMessag(message: String) {
+    override fun showMessage(message: String) {
         Toast.makeText(context,message,Toast.LENGTH_LONG).show()
     }
 }

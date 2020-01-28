@@ -5,7 +5,7 @@ import android.app.Application
 import android.content.Context
 
 @SuppressLint("Registered")
-class ProvidContext : Application() {
+class ProviderContext : Application() {
 
 
     init {
@@ -13,7 +13,7 @@ class ProvidContext : Application() {
     }
 
     companion object {
-        private var instance: ProvidContext? = null
+        private var instance: ProviderContext? = null
         fun getContext(): Context = instance!!.applicationContext
     }
 }

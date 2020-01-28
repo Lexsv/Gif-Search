@@ -9,58 +9,72 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ua.com.gifsearch.R
 import ua.com.gifsearch.reposetory.retrofit.GifObject
+import ua.com.gifsearch.utils.resourceToSring
 
 
-class FavoriteRecyclerAdapter(var list: List<GifObject>, val callback: Callback, val unFavoritCallback: UnFavoritCallback): RecyclerView.Adapter<FavoriteRecyclerAdapter.RecyclerHolder>()  {
+class FavoriteRecyclerAdapter(
+    list: List<GifObject>,
+    val callback: Callback,
+    val unFavoriteCallback: UnFavoriteCallback
+) : RecyclerView.Adapter<FavoriteRecyclerAdapter.RecyclerHolder>() {
 
 
-    var listIner :ArrayList<GifObject>
-    init {
-       listIner = list as ArrayList
+    var listInner: ArrayList<GifObject> = list as ArrayList
+
+
+    fun listRemove(item: GifObject) {
+        listInner.remove(item)
     }
 
-    fun listRemove(item: GifObject){
-        listIner.remove(item)}
 
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder =
+        RecyclerHolder(
+            LayoutInflater
+                .from(parent.context)
+                .inflate(R.layout.row_recycle, parent, false)
+        )
 
+    override fun getItemCount(): Int = listInner.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerHolder = RecyclerHolder(
-        LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.row_recycle, parent, false))
+    override fun onBindViewHolder(holder: RecyclerHolder, position: Int) {
+        holder.bind(listInner[position])
+    }
 
-    override fun getItemCount(): Int = listIner.size
-
-    override fun onBindViewHolder(holder: RecyclerHolder, position: Int) { holder.bind(listIner[position]) }
-    inner class RecyclerHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    inner class RecyclerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val imageView = itemView.findViewById<ImageView>(R.id.rv_image)
         private val title = itemView.findViewById<TextView>(R.id.rv_title)
-        private val favoritButtn = itemView.findViewById<ImageView>(R.id.rv_follovingButtn)
+        private val favoriteButton = itemView.findViewById<ImageView>(R.id.rv_favorite_button)
 
         fun bind(item: GifObject) {
-            if (item.favorite)favoritButtn.setImageResource(R.drawable.ic_favorite_on)
+            val defaultName = resourceToSring(R.string.no_name)
 
-            if (item.title == "") title.text = "No name" else title.text = item.title
+            if (item.favorite) favoriteButton.setImageResource(R.drawable.ic_favorite_on)
+            else favoriteButton.setImageResource(R.drawable.ic_favorite_off)
+
+            if (item.title == "") title.text = defaultName
+            else title.text = item.title
 
             Glide.with(imageView)
                 .load(item.media[0].gif.preview)
                 .placeholder(R.drawable.ic_cloud_download)
                 .into(imageView)
-                favoritButtn.setOnClickListener{
-                    if (adapterPosition != RecyclerView.NO_POSITION) {
-                        if (!item.favorite){
-                            item.favorite = true
-                            favoritButtn.setImageResource(R.drawable.ic_favorite_on)}
-                        else {
-                            item.favorite = false
-                            favoritButtn.setImageResource(R.drawable.ic_favorite_off)}
+            favoriteButton.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    if (!item.favorite) {
+                        item.favorite = true
+                        favoriteButton.setImageResource(R.drawable.ic_favorite_on)
+                    } else {
+                        item.favorite = false
+                        favoriteButton.setImageResource(R.drawable.ic_favorite_off)
+                    }
 
-                        unFavoritCallback.onFavoritClicked(listIner[adapterPosition])}
+                    unFavoriteCallback.onFavoriteClicked(listInner[adapterPosition])
                 }
-                itemView.setOnClickListener{
-                    if (adapterPosition != RecyclerView.NO_POSITION) callback.onItemClicked(listIner[adapterPosition])
-                }
+            }
+            itemView.setOnClickListener {
+                if (adapterPosition != RecyclerView.NO_POSITION) callback.onItemClicked(listInner[adapterPosition])
+            }
         }
 
     }
@@ -69,8 +83,8 @@ class FavoriteRecyclerAdapter(var list: List<GifObject>, val callback: Callback,
         fun onItemClicked(item: GifObject)
     }
 
-    interface UnFavoritCallback{
-        fun onFavoritClicked(item: GifObject)
+    interface UnFavoriteCallback {
+        fun onFavoriteClicked(item: GifObject)
 
 
     }

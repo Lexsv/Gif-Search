@@ -5,7 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 
 import com.google.gson.reflect.TypeToken
-
+import java.lang.reflect.Type
 
 
 fun isNet(context: Context): Boolean {
@@ -16,7 +16,7 @@ fun isNet(context: Context): Boolean {
 
 }
 
+fun resourceToSring(resource: Int) = ProviderContext.getContext().resources.getString(resource)
 
 
-
-inline fun <reified T> genericType() = object: TypeToken<T>() {}.type
+inline fun <reified T> genericType(): Type = object: TypeToken<T>() {}.type

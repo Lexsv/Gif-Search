@@ -23,11 +23,4 @@ interface JSONPlaceHolderApi {
         ): Call<TenorGif>
 
 
-    @GET("gifs?")
-    fun getGifById(
-        @Query("key") key: String,
-        @Query("ids") id : String,
-        @Query("media_filter") filter: String = "minimal"
-    ): Call<TenorGif>
-
 }

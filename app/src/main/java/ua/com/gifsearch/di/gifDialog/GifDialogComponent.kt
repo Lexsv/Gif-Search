@@ -1,10 +1,10 @@
 package ua.com.gifsearch.di.gifDialog
 
-import android.view.View
+
 import dagger.Component
 import ua.com.gifsearch.presenters.gifDialog.GifFragment
 
-@Component(modules = arrayOf(GifFragmentProvid::class,GifPresenterModule::class))
-interface GifDialodComponent {
+@Component(modules = arrayOf(GifFragmentProvider::class,GifPresenterModule::class))
+interface GifDialogComponent {
     fun inject(view: GifFragment)
 }

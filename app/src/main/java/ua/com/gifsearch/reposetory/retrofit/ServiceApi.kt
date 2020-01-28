@@ -3,7 +3,7 @@ package ua.com.gifsearch.reposetory.retrofit
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ServiseApi {
+class ServiceApi {
     companion object {
         private val BASE_URL = "https://api.tenor.com/v1/"
         private var retrofit: Retrofit? = null

@@ -2,4 +2,10 @@
     <string name="app_name">Gif Search</string>
     <string name="TENOR_KEY">CJ20LGM4MQ0C</string>
     <string name="search">Search....</string>
+    <string name="bt_search">Search</string>
+    <string name="image_load">image_load</string>
+    <string name="favorite_button">favorite button</string>
+    <string name="button_close">button close</string>
+    <string name="button_save">button save</string>
+    <string name="no_name">No name</string>
 </resources>

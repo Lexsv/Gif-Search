@@ -4,5 +4,4 @@ import dagger.Module
 import ua.com.gifsearch.presenters.gifDialog.IGifDialog
 
 @Module
-class GifFragmentProvid(var view: IGifDialog.View) {
-}
+class GifFragmentProvider(var view: IGifDialog.View)

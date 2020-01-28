@@ -5,19 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = arrayOf(FavoritList::class), version = 1, exportSchema = false)
-abstract class FavoriDB : RoomDatabase() {
-    abstract fun getFavorit(): FavoritDao
+@Database(entities = arrayOf(FavoriteList::class), version = 2, exportSchema = false)
+abstract class FavoriteDB : RoomDatabase() {
+    abstract fun getFavorite(): FavoriteDao
 
     companion object {
         @Volatile
-        private var INIT: FavoriDB? = null
+        private var INIT: FavoriteDB? = null
 
-        fun getInit(context: Context): FavoriDB {
+        fun getInit(context: Context): FavoriteDB {
             synchronized(this) {
                 var temp = INIT
                 if (temp == null) {
-                    temp = Room.databaseBuilder(context, FavoriDB::class.java, "favorit")
+                    temp = Room.databaseBuilder(context, FavoriteDB::class.java, "favorite")
                         .fallbackToDestructiveMigration()
                         .build()
                     INIT = temp

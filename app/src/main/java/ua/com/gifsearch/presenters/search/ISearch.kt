@@ -15,10 +15,10 @@ interface ISearch {
         fun showRecyclerList(list: List<GifObject>)
         fun getLifecycleOwner(): LifecycleOwner
         fun hideKeyBoard()
-        fun swohNextListGif(list: List<GifObject>)
+        fun showNextListGif(list: List<GifObject>)
         fun finishLoad()
         fun showGif (item : GifObject)
-        fun swohMessag(message : String)
-        fun hideProgsess()
+        fun showMessage(message : String)
+        fun hideProgress()
     }
 }

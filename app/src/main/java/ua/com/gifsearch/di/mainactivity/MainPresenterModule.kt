@@ -7,7 +7,7 @@ import ua.com.gifsearch.presenters.mainActivity.MainPresenter
 
 
 @Module
-class MainPresenterModul(var view: IMaimActivity.View) {
+class MainPresenterModule(var view: IMaimActivity.View) {
     @Provides
     fun getMainPresenterI(): IMaimActivity.Presenter = MainPresenter(view)
 }

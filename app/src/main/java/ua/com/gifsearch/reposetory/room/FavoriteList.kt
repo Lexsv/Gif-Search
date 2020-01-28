@@ -4,9 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "favorit")
-data class FavoritList (
-    @PrimaryKey()
+@Entity(tableName = "favorite")
+data class FavoriteList (
+    @PrimaryKey
     var id: Int,
     var json: String
     )

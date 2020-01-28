@@ -16,15 +16,16 @@ import com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayoutD
 import kotlinx.android.synthetic.main.search.*
 import ua.com.gifsearch.R
 import ua.com.gifsearch.di.saerch.DaggerSearchComponent
-import ua.com.gifsearch.di.saerch.SearchPresenterModul
+import ua.com.gifsearch.di.saerch.SearchPresenterModule
 import ua.com.gifsearch.presenters.gifDialog.GifFragment
 import ua.com.gifsearch.reposetory.retrofit.GifObject
 import javax.inject.Inject
 
-class SearchFragment: Fragment(), SwipyRefreshLayout.OnRefreshListener,ISearch.View {
+class SearchFragment : Fragment(), SwipyRefreshLayout.OnRefreshListener, ISearch.View {
 
-    var searchRecyclerAdapter : SearchRecyclerAdapter? = null
-    var queue = 10
+    private var searchRecyclerAdapter: SearchRecyclerAdapter? = null
+    private var queue = 10
+    private val SPAN_COUNT = 2
 
     @Inject
     lateinit var mPresenter: ISearch.Presenter
@@ -34,72 +35,76 @@ class SearchFragment: Fragment(), SwipyRefreshLayout.OnRefreshListener,ISearch.V
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.search,container,false)
+        return inflater.inflate(R.layout.search, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        addDaggerDepandance()
+        addDaggerDependence()
         addListeners()
         mPresenter.onStart()
     }
 
 
-
-
-     override fun showRecyclerList(list: List<GifObject>) {
+    override fun showRecyclerList(list: List<GifObject>) {
         searchRecyclerAdapter =
             SearchRecyclerAdapter(list,
                 object : SearchRecyclerAdapter.Callback {
                     override fun onItemClicked(item: GifObject) {
-
                         mPresenter.onClickCardView(item)
-
-                    }},
-                object : SearchRecyclerAdapter.FavoritCallback{
-                    override fun onFavoritClicked(item: GifObject) {
-                       mPresenter.addInFavorite(item)
-                    }})
-         rv_search.adapter = searchRecyclerAdapter
-         rv_search.layoutManager = GridLayoutManager(context,2)
+                    }
+                },
+                object : SearchRecyclerAdapter.FavoriteCallback {
+                    override fun onFavoriteClicked(item: GifObject) {
+                        mPresenter.addInFavorite(item)
+                    }
+                })
+        rv_search.adapter = searchRecyclerAdapter
+        rv_search.layoutManager = GridLayoutManager(context, SPAN_COUNT)
     }
 
 
+    override fun showNextListGif(list: List<GifObject>) {
+        if (searchRecyclerAdapter == null && rv_search.adapter == null) {
+            showRecyclerList(list)
+        }else{
+            val scroll = rv_search.adapter!!.itemCount + 1
+            searchRecyclerAdapter!!.listAdd(list)
+            searchRecyclerAdapter!!.notifyDataSetChanged()
+            rv_search.smoothScrollToPosition(scroll)
+            swipe_refresh.isRefreshing = false
+        }
 
-    override fun swohNextListGif(list: List<GifObject>){
-        val scroll = rv_search.adapter!!.itemCount + 1
-        searchRecyclerAdapter!!.listAdd(list)
-        searchRecyclerAdapter!!.notifyDataSetChanged()
-        rv_search.smoothScrollToPosition(scroll)
-        swipyRefresh.isRefreshing = false
+
+
     }
 
     override fun finishLoad() {
-        swipyRefresh.isRefreshing = false
-        Toast.makeText(context,"Gif больше нет",Toast.LENGTH_LONG).show()
+        swipe_refresh.isRefreshing = false
+        Toast.makeText(context, "Gif больше нет", Toast.LENGTH_LONG).show()
     }
 
     override fun onRefresh(direction: SwipyRefreshLayoutDirection?) {
-        queue +=10
-        mPresenter.listNext(input_search.text.toString(),queue)
+        queue += 10
+        mPresenter.listNext(input_search.text.toString(), queue)
     }
 
-    fun   addDaggerDepandance(){
+    private fun addDaggerDependence() {
         DaggerSearchComponent.builder()
-            .searchPresenterModul(SearchPresenterModul(this))
+            .searchPresenterModule(SearchPresenterModule(this))
             .build()
             .inject(this)
     }
 
-    fun addListeners(){
-        swipyRefresh.setOnRefreshListener(this)
+    private fun addListeners() {
+        swipe_refresh.setOnRefreshListener(this)
         search_button.setOnClickListener {
-            queue= 10
-            mPresenter.loadListGif(input_search.text.toString(),queue)
-            swipyRefresh.isRefreshing = true
+            queue = 10
+            mPresenter.loadListGif(input_search.text.toString(), queue)
+            swipe_refresh.isRefreshing = true
         }
 
-        input_search.setOnEditorActionListener{_, actionId: Int, _->
+        input_search.setOnEditorActionListener { _, actionId: Int, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 mPresenter.loadListGif(input_search.text.toString(), queue)
                 hideKeyBoard()
@@ -109,21 +114,22 @@ class SearchFragment: Fragment(), SwipyRefreshLayout.OnRefreshListener,ISearch.V
         }
     }
 
-    override fun hideKeyBoard(){
+    override fun hideKeyBoard() {
         (context!!.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager)
             .hideSoftInputFromWindow(cv_search.windowToken, 0)
     }
+
     override fun getLifecycleOwner(): LifecycleOwner = this
 
-    override fun showGif (item : GifObject){
-        GifFragment(item).show(childFragmentManager,"11")
+    override fun showGif(item: GifObject) {
+        GifFragment(item).show(childFragmentManager, "11")
     }
 
-    override fun swohMessag(message: String) {
-        Toast.makeText(context,message,Toast.LENGTH_LONG).show()
+    override fun showMessage(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun hideProgsess() {
-        if (swipyRefresh.isRefreshing) swipyRefresh.isRefreshing = false
+    override fun hideProgress() {
+        if (swipe_refresh.isRefreshing) swipe_refresh.isRefreshing = false
     }
 }

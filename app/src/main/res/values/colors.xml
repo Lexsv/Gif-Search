@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#706363</color>
     <color name="colorAccent">#2E2C2D</color>
     <color name="whit">#FFF</color>
+    <color name="background_gray">#37000000</color>
+    <color name="tab_ripple_color">#FF424242</color>
 </resources>

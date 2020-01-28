@@ -5,5 +5,4 @@ import ua.com.gifsearch.presenters.mainActivity.IMaimActivity
 
 
 @Module
-class MainViewProvid(var view: IMaimActivity.View) {
-}
+class MainViewProvider(var view: IMaimActivity.View)
